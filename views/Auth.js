@@ -4,7 +4,7 @@ const { User } = require("../db/models/userModel");
 
 const register = async (req, res) => {
   try {
-    const { email, password: plainTextPassword } = req.body;
+    const { email, password: plainTextPassword, username } = req.body;
     const result = await User.find({ email: email });
     if (result.length !== 0) {
       res.status(403).send({ status: "error", message: "User already exist" });
@@ -15,6 +15,7 @@ const register = async (req, res) => {
     const newuser = new User({
       email,
       password,
+      username
     });
     const error = newuser.validateSync();
     if (error) throw error;
@@ -31,7 +32,7 @@ const login = async (req, res) => {
     const result = await User.find({ email: email });
     if (result.length === 0) {
       res
-        .status(404)
+        .status(403)
         .send({ status: "error", message: "Incorrect Credentials" });
       return;
     }
@@ -39,15 +40,18 @@ const login = async (req, res) => {
     const check = await bcrypt.compare(plainTextPassword, user.password);
     if (!check) {
       res
-        .status(404)
+        .status(403)
         .send({ status: "error", message: "Incorrect Credentials" });
       return;
     }
-    // signing a token for around 1 hour
+    // signing a token for around 5 min
     const jwt_token = jwt.sign(
-      { email, exp: Math.floor(Date.now() / 1000) + 60 * 60 },
+      { email, exp: Math.floor(Date.now() / 1000) + 60 * 5 },
       process.env.SECRET_KEY_JWT
     );
+
+    await User.updateOne({ email }, { $set: { jwt_token } })
+
     res.send({
       status: "ok",
       message: "User logged in success",
@@ -57,4 +61,14 @@ const login = async (req, res) => {
     res.status(500).send({ status: "error", message: err.message });
   }
 };
-module.exports = { register, login };
+
+const logout = async (req, res) => {
+  try {
+    await User.updateOne({ email: req.user.email }, { $unset: { jwt_token: "" } })
+    res.send({ status: "ok", message: "Logout successfully" })
+  } catch (err) {
+    res.status(500).send({ status: "error", message: err.message });
+  }
+}
+
+module.exports = { register, login, logout };

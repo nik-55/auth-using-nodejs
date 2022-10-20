@@ -1,5 +1,7 @@
 const vd = require("validator");
 const jwt = require("jsonwebtoken");
+const { User } = require("../db/models/userModel")
+
 const valid = (email, password) => {
   if (!vd.isLength(email, { min: 9 }) || !vd.isEmail(email))
     return { status: "error", code: 400, message: "Invalid email type" };
@@ -18,7 +20,7 @@ const validate = (req, res, next) => {
   }
 };
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
   const authorization = req.headers.authorization;
   try {
     if (!authorization) {
@@ -33,6 +35,12 @@ const auth = (req, res, next) => {
     const jwt_token = tokenArray[tokenArray.length - 1];
     const result = jwt.verify(jwt_token, process.env.SECRET_KEY_JWT);
     // if verification failed then it throws error
+
+    const check = await User.find({ email: result.email, jwt_token: { $exists: true } })
+    if (check.length === 0) {
+      res.status(401).send("Unauthorized access");
+      return;
+    }
     req.user = result;
     next();
   } catch (err) {
