@@ -1,6 +1,6 @@
 # [Auth using Node js](https://github.com/nik-55/auth-using-nodejs.git)
 
-> ### `Hello , Myself Nikhil Mahajan studying at iit roorkee.`
+> [`Hello , Myself Nikhil Mahajan studying at iit roorkee.`](https://github.com/nik-55)
 
 Many time while developing we require to authorize users. Writing from scratch the whole auth can be trouble.  
 This repo is just a simple template creating simple api end points :
