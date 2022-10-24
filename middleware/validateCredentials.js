@@ -48,7 +48,7 @@ const auth = async (req, res, next) => {
   } catch (err) {
     let code = 500;
     let message = "error occured in processing the request"
-    if (err?.message === "jwt expired") { code = 401; message = "jwt expired" }
+    if (err?.message === "jwt expired") { code = 200; message = "session time out" }
     res.status(code).send({ status: "error", message });
   }
 };
