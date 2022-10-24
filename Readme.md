@@ -1,6 +1,6 @@
 # [Auth using Node js](https://github.com/nik-55/auth-using-nodejs.git)
 
-> [`Hello , Myself Nikhil Mahajan studying at iit roorkee.`](https://github.com/nik-55)
+> [Hello , Myself Nikhil Mahajan studying at iit roorkee.](https://github.com/nik-55)
 
 Many time while developing we require to authorize users. Writing from scratch the whole auth can be trouble.  
 This repo is just a simple template creating simple api end points :
@@ -9,6 +9,7 @@ This repo is just a simple template creating simple api end points :
 /register
 /login
 /profile
+/logout
 ```
 
 ## Setup
@@ -46,18 +47,14 @@ node ./server.js
 
 ## Api End Points
 
-```
-/register
-```
+`/register`
 
 - This takes email and password from request and first validate that email and password requested are correct input or not.
 - Then if correct it hashes the password.
 - User information is then stored in your mongo db.
 - Email need to be unique otherwise it will response with error.
 
-```
-/login
-```
+`/login`
 
 - This also takes email and password from request and validate them as correct input.
 - Then if correct it query the database to check if user exist.
@@ -65,12 +62,16 @@ node ./server.js
 - If correct it response with a jwt token whose expiration time is 1 hour.
 - Payload of token conatin email.
 
-```
-/profile
-```
+`/profile`
 
 - Request body header should contain a valid jwt token in Authorization Field otherwise it will response with error.
 - Then if jwt token is verified it decodes the payload and query on database using email to find more user information.
+
+`/logout`
+
+- When user logged in , jwt token is saved in database.
+- This api end point delete this saved jwt token from database.
+- In Auth middleware , even if jwt is verified but if this jwt token is not present on database then this request is considered to be unauthorized.
 
 ### Customization
 
