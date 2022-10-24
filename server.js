@@ -8,10 +8,11 @@ require("./db/connect");
 
 const app = express();
 
-var corsOptions = {
-  origin: ['http://localhost:3000']
+// Setting up the cross origin
+const ALLOWED_ORIGIN = ['http://localhost:3000']
+const corsOptions = {
+  origin: ALLOWED_ORIGIN
 }
-
 app.use(cors(corsOptions))
 
 app.use(bodyParser.urlencoded({ extended: false }));

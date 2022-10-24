@@ -5,9 +5,13 @@ const { User } = require("../db/models/userModel");
 const register = async (req, res) => {
   try {
     const { email, password: plainTextPassword, username } = req.body;
+    if (username?.length < 5 || username?.length > 18) {
+      res.status(400).send({ status: "error", message: "Username should not be too short or too long" });
+      return;
+    }
     const result = await User.find({ email: email });
     if (result.length !== 0) {
-      res.status(403).send({ status: "error", message: "User already exist" });
+      res.status(409).send({ status: "error", message: "Email already exist" });
       return;
     }
 
@@ -21,8 +25,8 @@ const register = async (req, res) => {
     if (error) throw error;
     newuser.save();
     res.send({ status: "ok", message: "User registered successfully" });
-  } catch (err) {
-    res.status(500).send({ status: "error", message: err.message });
+  } catch {
+    res.status(500).send({ status: "error", message: "Error occured in processing the request" });
   }
 };
 
@@ -55,19 +59,20 @@ const login = async (req, res) => {
     res.send({
       status: "ok",
       message: "User logged in success",
-      data: { jwt_token: jwt_token },
+      jwt_token: jwt_token,
     });
-  } catch (err) {
-    res.status(500).send({ status: "error", message: err.message });
+  } catch {
+    res.status(500).send({ status: "error", message: "Error occured in processing the request" });
   }
 };
 
+// Erasing token from database
 const logout = async (req, res) => {
   try {
     await User.updateOne({ email: req.user.email }, { $unset: { jwt_token: "" } })
     res.send({ status: "ok", message: "Logout successfully" })
-  } catch (err) {
-    res.status(500).send({ status: "error", message: err.message });
+  } catch {
+    res.status(500).send({ status: "error", message: "Error occured in processing the request" });
   }
 }
 
