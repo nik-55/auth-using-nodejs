@@ -35,6 +35,7 @@ In .env :
 MONGO_DB=<url copied above>
 PORT=<Any port number like 8000>
 SECRET_KEY_JWT=<Secret key for generating and verifing jwt tokens>
+ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 ```
 
 ### Starting the server
