@@ -9,7 +9,7 @@ require("./db/connect");
 const app = express();
 
 // Setting up the cross origin
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGIN?.split(',') || []
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || []
 const corsOptions = {
   origin: ALLOWED_ORIGINS
 }
