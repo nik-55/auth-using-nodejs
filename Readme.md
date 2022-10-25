@@ -81,6 +81,8 @@ node ./server.js
 - Create more api end points in routes.js
   and write the function in view folder.
 
+### [Frontend Template](https://github.com/nik-55/auth-frontend)
+
 ### Message
 
 ```
