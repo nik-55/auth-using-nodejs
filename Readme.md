@@ -79,7 +79,7 @@ node ./server.js
 - One can modify user schemma to create more fields or can use auth middleware to authorize the request.
 
 - Create more api end points in routes.js
-  and write the function in view folder.
+  and write the function in controllers folder.
 
 ### [Frontend Template](https://github.com/nik-55/auth-frontend)
 

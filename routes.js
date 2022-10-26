@@ -1,6 +1,7 @@
-const { register, login, logout } = require("./views/Auth");
-const { profile } = require("./views/Profile");
+const { register, login, logout } = require("./controllers/Auth");
+const { profile } = require("./controllers/Profile");
 const { validate, auth } = require("./middleware/validateCredentials");
+
 const routes = (app) => {
   app.post("/register", validate, register);
   app.post("/login", validate, login);
